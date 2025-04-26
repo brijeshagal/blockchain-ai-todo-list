@@ -1,6 +1,11 @@
 import express from "express";
+import {
+  createTask,
+  deleteTask,
+  getTasks,
+  markTaskCompleted,
+} from "../controllers/taskController";
 import { authenticate } from "../middlewares/auth";
-import { createTask, deleteTask, getTasks, markTaskCompleted } from "../controllers/taskController";
 
 const router = express.Router();
 
