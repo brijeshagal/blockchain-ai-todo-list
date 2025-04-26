@@ -18,8 +18,7 @@ export const authenticate = async (
       userId: string;
     };
 
-    // Attach user to req.body
-    req.body.user = { id: decoded.userId };
+    req.user = { id: decoded.userId };
     next();
   } catch (err) {
     res.status(403).send("Forbidden");

@@ -1,10 +1,10 @@
+// types/express.d.ts (or any .d.ts file)
+import "express";
 declare global {
   namespace Express {
     interface Request {
-      body: {
-        user?: {
-          id: string;
-        };
+      user?: {
+        id: string;
       };
     }
   }
