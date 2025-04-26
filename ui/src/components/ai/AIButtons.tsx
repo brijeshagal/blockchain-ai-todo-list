@@ -1,3 +1,4 @@
+import api from "@/lib/axios";
 import axios from "axios";
 
 const AIButtons = ({
@@ -20,7 +21,7 @@ const AIButtons = ({
   };
 
   const fetchTips = async () => {
-    const res = await axios.get("/api/ai/tips");
+    const res = await api.get("/api/ai/tips");
     setTips(res.data);
   };
 

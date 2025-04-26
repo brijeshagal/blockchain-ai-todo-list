@@ -1,7 +1,7 @@
 "use client";
 
 import AIButtons from "@/components/ai/AIButtons";
-import axios from "axios";
+import api from "@/lib/axios";
 import { useEffect, useState } from "react";
 
 interface Task {
@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchTasks() {
       try {
-        const res = await axios.get("/api/tasks");
+        const res = await api.get("/api/tasks");
         setTasks(res.data);
       } catch (err) {
         console.error("Failed to fetch tasks", err);
@@ -35,7 +35,7 @@ export default function Home() {
     if (!title.trim()) return;
 
     try {
-      const res = await axios.post("/api/tasks", { title });
+      const res = await api.post("/api/tasks", { title });
       setTasks((prev) => [...prev, res.data]);
       setTitle("");
     } catch (err) {
@@ -45,7 +45,7 @@ export default function Home() {
 
   const handleDeleteTask = async (id: string) => {
     try {
-      await axios.delete(`/api/tasks/${id}`);
+      await api.delete(`/api/tasks/${id}`);
       setTasks((prev) => prev.filter((task) => task._id !== id));
     } catch (err) {
       console.error("Failed to delete task", err);
@@ -54,7 +54,7 @@ export default function Home() {
 
   const handleCompleteTask = async (id: string) => {
     try {
-      const res = await axios.put(`/api/tasks/${id}/complete`);
+      const res = await api.put(`/api/tasks/${id}/complete`);
       setTasks((prev) =>
         prev.map((task) =>
           task._id === id ? { ...task, completed: res.data.completed } : task
@@ -74,7 +74,9 @@ export default function Home() {
     if (!editTitle.trim() || !editingId) return;
 
     try {
-      const res = await axios.put(`/api/tasks/${editingId}`, { title: editTitle });
+      const res = await api.put(`/api/tasks/${editingId}`, {
+        title: editTitle,
+      });
       setTasks((prev) =>
         prev.map((task) =>
           task._id === editingId ? { ...task, title: res.data.title } : task
@@ -89,7 +91,8 @@ export default function Home() {
 
   const completedCount = tasks.filter((t) => t.completed).length;
   const totalCount = tasks.length;
-  const completionRate = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  const completionRate =
+    totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
   return (
     <div style={{ maxWidth: 600, margin: "auto", padding: 16 }}>
