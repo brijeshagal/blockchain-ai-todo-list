@@ -1,10 +1,15 @@
 import { Request, Response } from "express";
-import { suggestPriority } from "../services/ai";
+import { suggestPriority, suggestProductivityTips } from "../services/ai";
 
 export const getTaskSuggestions = async (req: Request, res: Response) => {
-  const {taskTitle, deadline} = await req.body;
-  const response = await suggestPriority(taskTitle, deadline);
-  res.json(response);
+  try {
+    const { taskTitle, deadline } = await req.body;
+    const response = await suggestPriority(taskTitle, deadline);
+    res.json(response);
+  } catch (e) {
+    console.log({ e });
+    res.status(500).json({ error: "Failed to get task suggestions" });
+  }
 };
 
 export const getOverdueReminders = async (req: Request, res: Response) => {
@@ -16,10 +21,11 @@ export const getOverdueReminders = async (req: Request, res: Response) => {
 };
 
 export const getProductivityTips = async (req: Request, res: Response) => {
-  // TODO: Could use AI-generated tips here
-  res.json([
-    "Break your tasks into smaller chunks.",
-    "Use the Pomodoro technique.",
-    "Focus on one task at a time.",
-  ]);
+  try {
+    const response = await suggestProductivityTips();
+    res.json(response);
+  } catch (e) {
+    console.log({ e });
+    res.status(500).json({ error: "Failed to get productivity tips" });
+  }
 };

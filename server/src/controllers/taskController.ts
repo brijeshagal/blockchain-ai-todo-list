@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { TaskModel as Task } from "../models/task";
+import { getWalletClient } from "../utils/walletclient";
 
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -17,6 +18,14 @@ export const createTask = async (
 ): Promise<void> => {
   const { title, description, deadline, priority } = await req.body;
   const username = (req as any).user?.username;
+
+  try{
+    const walletClient = getWalletClient();
+    
+  }
+  catch(e){
+
+  }
 
   try {
     const task = new Task({

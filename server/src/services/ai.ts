@@ -1,6 +1,7 @@
 import { PromptTemplate } from "@langchain/core/prompts";
 import { OpenAI } from "@langchain/openai";
 import dotenv from "dotenv";
+import { isArray } from "util";
 
 dotenv.config();
 
@@ -27,3 +28,16 @@ export async function suggestPriority(taskTitle: string, dueDate: string) {
   // Now safely parse!
   return { priority: response.trim() };
 }
+
+export const suggestProductivityTips = async () => {
+  const prompt = PromptTemplate.fromTemplate(`
+      You are a unique and thoughtful productivity coach.
+      
+      Provide a quick productivity tip for staying focused and efficient in not more than 15 words.
+    `);
+
+  const chain = prompt.pipe(model);
+
+  const response = await chain.invoke({});
+  return isArray(response) ? response : [response];
+};

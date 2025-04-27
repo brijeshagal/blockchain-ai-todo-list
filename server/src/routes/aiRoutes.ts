@@ -9,6 +9,6 @@ const aiRouter = express.Router();
 
 aiRouter.post("/suggestions", getTaskSuggestions);
 aiRouter.post("/reminders", getOverdueReminders);
-aiRouter.post("/tips", getProductivityTips);
+aiRouter.get("/tips", getProductivityTips);
 
 export default aiRouter;
