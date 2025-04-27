@@ -86,6 +86,7 @@ export default function Home() {
         taskTitle,
         deadline,
       });
+      console.log({ res });
 
       const result: "low" | "medium" | "high" = res.data.split(": ")[1];
 

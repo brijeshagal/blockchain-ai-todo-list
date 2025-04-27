@@ -1,6 +1,8 @@
 "use client";
 
 import api from "@/lib/axios";
+import { ArrowRight, KeyRound, LogIn, User } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,46 +10,102 @@ export default function Login() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!username.trim() || !password.trim()) return;
+
     try {
+      setIsLoading(true);
       const res = await api.post("/auth/login", { username, password });
-      await localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.token);
       router.push("/");
     } catch (err) {
       console.error("Failed to login", err);
       alert("Login failed. Check credentials!");
-      // router.push("/");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", padding: 16 }}>
-      <h1>🔐 Login</h1>
+    <div className="min-h-screen bg-gray-950 text-gray-200 flex items-center justify-center px-4">
+      <div className="bg-gray-900 rounded-xl shadow-md p-8 w-full max-w-md border border-gray-800">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold flex items-center justify-center text-white">
+            <LogIn size={28} className="mr-2" /> Login
+          </h1>
+          <p className="text-indigo-300 mt-2">
+            Welcome back! Please login to your account
+          </p>
+        </div>
 
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ width: "100%", marginBottom: 8, padding: 8 }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ width: "100%", marginBottom: 16, padding: 8 }}
-      />
-      <button onClick={handleLogin} style={{ width: "100%", padding: 10 }}>
-        Login
-      </button>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Username
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-3 py-3 bg-gray-800 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-200 pl-10"
+              />
+              <User
+                size={18}
+                className="absolute left-3 top-3.5 text-gray-400"
+              />
+            </div>
+          </div>
 
-      <p style={{ marginTop: 16 }}>
-        Don&apos;t have an account?{" "}
-        <a href="/signup" style={{ color: "blue" }}>
-          Sign up
-        </a>
-      </p>
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-3 bg-gray-800 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-200 pl-10"
+              />
+              <KeyRound
+                size={18}
+                className="absolute left-3 top-3.5 text-gray-400"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleLogin}
+            disabled={isLoading || !username.trim() || !password.trim()}
+            className="w-full flex items-center justify-center px-4 py-3 bg-indigo-700 text-white rounded-md hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+            ) : (
+              <>
+                <LogIn size={18} className="mr-2" /> Log In
+              </>
+            )}
+          </button>
+
+          <div className="text-center text-gray-400 border-t border-gray-800 pt-6">
+            <p>
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/signup"
+                className="text-indigo-400 hover:text-indigo-300 transition flex items-center justify-center mt-2"
+              >
+                Sign up <ArrowRight size={16} className="ml-1" />
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
