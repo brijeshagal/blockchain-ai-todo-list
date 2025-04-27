@@ -18,7 +18,7 @@ export async function suggestPriority(taskTitle: string, dueDate: string) {
     Task: {taskTitle}
     Due Date: {dueDate}
     
-    Suggest a priority: (High, Medium, Low)
+    Suggest a priority: (high, medium, low)
   `);
 
   const chain = prompt.pipe(model);
@@ -26,7 +26,7 @@ export async function suggestPriority(taskTitle: string, dueDate: string) {
   const response = await chain.invoke({ taskTitle, dueDate });
 
   // Now safely parse!
-  return { priority: response.trim() };
+  return response;
 }
 
 export const suggestProductivityTips = async () => {
