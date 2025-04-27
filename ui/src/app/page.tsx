@@ -81,19 +81,19 @@ export default function Home() {
       } else {
         setIsPrioritizing(true);
       }
-      console.log(deadline);
 
       const res = await api.post("/ai/suggestions", {
         taskTitle,
         deadline,
       });
-      console.log({ res });
+
+      const result: "low" | "medium" | "high" = res.data.split(": ")[1];
 
       // Set the priority based on the suggestion
       if (isEdit) {
-        setEditPriority(res.data.priority || "medium");
+        setEditPriority(result || "medium");
       } else {
-        setPriority(res.data.priority || "medium");
+        setPriority(result || "medium");
       }
     } catch (error) {
       console.error("Failed to get priority suggestion:", error);
@@ -258,7 +258,6 @@ export default function Home() {
           </h3>
           <AIButtons
             setReminders={setReminders}
-            setSuggestions={setSuggestions}
             setTips={setTips}
             className="flex flex-wrap gap-3"
           />

@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: process.env.NEXT_PUBLIC_IS_DEV
+    ? "http://localhost:8080/api"
+    : process.env.NEXT_PUBLIC_SERVER,
 });
 
 // Attach Authorization header if token exists

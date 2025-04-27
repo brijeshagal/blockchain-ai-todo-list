@@ -4,13 +4,11 @@ import { useState } from "react";
 
 const AIButtons = ({
   setReminders,
-  setSuggestions,
   setTips,
   className = "",
 }: {
   setReminders: React.Dispatch<React.SetStateAction<unknown[]>>;
   setTips: React.Dispatch<React.SetStateAction<string[]>>;
-  setSuggestions: React.Dispatch<React.SetStateAction<unknown[]>>;
   className?: string;
 }) => {
   const [loading, setLoading] = useState({
@@ -35,6 +33,7 @@ const AIButtons = ({
     try {
       setLoading((prev) => ({ ...prev, tips: true }));
       const res = await api.get("/ai/tips");
+      console.log({ res });
       setTips(res.data);
     } catch (error) {
       console.error("Failed to fetch tips:", error);
