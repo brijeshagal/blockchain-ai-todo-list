@@ -2,16 +2,21 @@ import mongoose from "mongoose";
 
 export const taskSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
+    username: {
+      type: String,
       ref: "User",
       required: true,
     },
     title: { type: String, required: true },
-    description: String,
-    dueDate: Date,
+    description: { type: String },
+    deadline: { type: Date },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
     completed: { type: Boolean, default: false },
-    blockchainHash: { type: String }, // optional
+    blockchainHash: { type: String },
   },
   { timestamps: true }
 );

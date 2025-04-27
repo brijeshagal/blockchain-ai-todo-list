@@ -3,8 +3,8 @@ import { TaskModel as Task } from "../models/task";
 
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.body.user?.id; // Access user from req.body
-    const tasks = await Task.find({ userId });
+    const username = (req as any).user?.username; // Access user from req.body
+    const tasks = await Task.find({ username });
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch tasks" });
@@ -15,12 +15,12 @@ export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { title, description, deadline, priority } = req.body;
-  const userId = req.body.user?.id;
+  const { title, description, deadline, priority } = await req.body;
+  const username = (req as any).user?.username;
 
   try {
     const task = new Task({
-      userId,
+      username,
       title,
       description,
       deadline,
@@ -40,10 +40,10 @@ export const deleteTask = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const userId = req.body.user?.id;
+  const username = (req as any).user?.username;
 
   try {
-    const deleted = await Task.findOneAndDelete({ _id: id, userId });
+    const deleted = await Task.findOneAndDelete({ _id: id, username });
 
     if (!deleted) {
       res.status(404).json({ error: "Task not found" });
@@ -61,11 +61,11 @@ export const markTaskCompleted = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
-  const userId = req.body.user?.id;
+  const username = (req as any).user?.username;
 
   try {
     const task = await Task.findOneAndUpdate(
-      { _id: id, userId },
+      { _id: id, username },
       { completed: true },
       { new: true }
     );

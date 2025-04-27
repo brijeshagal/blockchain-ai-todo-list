@@ -5,10 +5,10 @@ import {
   getProductivityTips,
 } from "../controllers/aiController";
 
-const router = express.Router();
+const aiRouter = express.Router();
 
-router.get("/suggestions", getTaskSuggestions);
-router.get("/reminders", getOverdueReminders);
-router.get("/tips", getProductivityTips);
+aiRouter.post("/suggestions", getTaskSuggestions);
+aiRouter.post("/reminders", getOverdueReminders);
+aiRouter.post("/tips", getProductivityTips);
 
-export default router;
+export default aiRouter;

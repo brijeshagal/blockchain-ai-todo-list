@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
+import { suggestPriority } from "../services/ai";
 
 export const getTaskSuggestions = async (req: Request, res: Response) => {
-  // TODO: Use deadlines and task types to suggest priorities
-  res.json([
-    { taskId: "abc123", suggestedPriority: "High" },
-    { taskId: "def456", suggestedPriority: "Medium" },
-  ]);
+  const {taskTitle, deadline} = await req.body;
+  const response = await suggestPriority(taskTitle, deadline);
+  res.json(response);
 };
 
 export const getOverdueReminders = async (req: Request, res: Response) => {
