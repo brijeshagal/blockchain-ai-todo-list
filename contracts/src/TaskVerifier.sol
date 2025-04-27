@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import {TaskAchiever} from "./TaskAchiever.sol";
 
 contract TaskVerifier {
+    TaskAchiever AchieverToken =
+        TaskAchiever(0xE0C81B3457cB755f51f1a901f1e8A55FbED0C45b);
     struct Task {
         bytes32 hash;
         bool completed;
