@@ -16,30 +16,38 @@ export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { title, description, deadline, priority } = await req.body;
+  const { title, deadline, priority } = (await req.body) as {
+    title: string;
+    deadline: string;
+    priority: string;
+  };
   const username = (req as any).user?.username;
 
-  try{
+  try {
     const walletClient = getWalletClient();
-    
-  }
-  catch(e){
-
-  }
+  } catch (e) {}
+  const newTask = deadline
+    ? {
+        username,
+        title,
+        deadline,
+        priority: priority.toLowerCase(),
+        completed: false,
+      }
+    : {
+        username,
+        title,
+        priority: priority.toLowerCase(),
+        completed: false,
+      };
 
   try {
-    const task = new Task({
-      username,
-      title,
-      description,
-      deadline,
-      priority,
-      completed: false,
-    });
+    const task = new Task(newTask);
 
     const savedTask = await task.save();
     res.status(201).json(savedTask);
   } catch (err) {
+    console.log({ err });
     res.status(500).json({ error: "Failed to create task" });
   }
 };
